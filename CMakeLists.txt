@@ -1,6 +1,10 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.0)
 project(Stack)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Stack main.cpp)
+set(SOURCE_EXE main.cpp src/Stack.cpp)
+
+include_directories(includes src)
+
+add_executable(main ${SOURCE_EXE})
