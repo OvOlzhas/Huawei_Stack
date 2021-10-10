@@ -109,7 +109,7 @@ struct StackInfo {
  * @param [in] stk Pointer to stack
  * @param [in] info Information about where and what broke
  */
-static void StackDump_ (Stack* stk, StackInfo info);
+void StackDump_ (Stack* stk, StackInfo info);
 
 /*!
  * Checking the stack for damage

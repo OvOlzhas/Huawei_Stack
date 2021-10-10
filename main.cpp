@@ -7,6 +7,7 @@ int main() {
     MainTest();
     TestWithTorture();
     SniperTest();
+    TestWithoutErrors();
 #endif
     return 0;
 }

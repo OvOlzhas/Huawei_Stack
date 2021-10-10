@@ -55,3 +55,23 @@ void SniperTest () {
     StackDump(stk, OK_STACK);
     StackVerifier(stk, StackDtor(&stk));
 }
+
+void TestWithoutErrors () {
+    printf(CYAN "////////////////////////////////////TestWithoutErrors///////////////////////////////////////\n" RESET);
+    Stack stk = {};
+    StackVerifier(stk, StackCtor(&stk, IntPrint, IntPoison));
+    StackVerifier(stk, StackPush(&stk, 1));
+    StackVerifier(stk, StackPush(&stk, 2));
+    StackVerifier(stk, StackPush(&stk, 3));
+    data_t value = 0;
+    StackVerifier(stk, StackPop(&stk, &value));
+    printf("%d", value);
+    StackVerifier(stk, StackPop(&stk, &value));
+    printf("%d", value);
+    StackVerifier(stk, StackPop(&stk, &value));
+    printf("%d", value);
+    StackVerifier(stk, StackPush(&stk, 4));
+    StackVerifier(stk, StackTop(&stk, &value));
+    printf("%d", value);
+    StackVerifier(stk, StackDtor(&stk));
+}

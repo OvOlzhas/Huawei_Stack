@@ -11,3 +11,5 @@ void TestWithTorture ();
 void MainTest ();
 
 void SniperTest ();
+
+void TestWithoutErrors ();
