@@ -50,7 +50,7 @@ void SniperTest () {
     StackVerifier(stk, StackPush(&stk, 1));
     StackVerifier(stk, StackPush(&stk, 2));
     StackVerifier(stk, StackPush(&stk, 3));
-    char* aim = (char *) &stk.size;
+    char* aim = (char *) &stk.data;
     *aim = 0xF0;
     StackDump(stk, OK_STACK);
     StackVerifier(stk, StackDtor(&stk));

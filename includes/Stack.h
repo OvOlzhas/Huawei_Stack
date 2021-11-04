@@ -54,7 +54,7 @@ static const char* ERROR_MESSAGE[] = {"OK",
 
 enum StackERROR {
     OK_STACK = 0,
-    NULL_STACK,
+    NULL_STACK, // manually numerate
     CREATED_STACK,
     LEFT_CANARY_STACK_DAMAGED,
     RIGHT_CANARY_STACK_DAMAGED,
@@ -198,3 +198,10 @@ int StackTop (Stack* stk, data_t* value);
  * @return Error code(0 if there are no errors)
  */
 int StackDtor (Stack* stk);
+
+/*!
+ * Stack Size
+ * @param [in] stk Pointer to stack
+ * @return Size of stack or -1 if stack is damaged
+ */
+size_t StackSize (Stack* stk);

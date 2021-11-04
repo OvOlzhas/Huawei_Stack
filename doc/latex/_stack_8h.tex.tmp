@@ -21,14 +21,14 @@ struct \mbox{\hyperlink{struct_stack_info}{Stack\+Info}}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{_stack_8h_acd241bfd0f66fd904126d08bded4f787}\label{_stack_8h_acd241bfd0f66fd904126d08bded4f787}} 
-\#define \mbox{\hyperlink{_stack_8h_acd241bfd0f66fd904126d08bded4f787}{W\+I\+T\+H\+\_\+\+C\+A\+N\+A\+RY}}
+\#define \mbox{\hyperlink{_stack_8h_acd241bfd0f66fd904126d08bded4f787}{WITH\+\_\+\+CANARY}}
 \begin{DoxyCompactList}\small\item\em Adding canary protection. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{_stack_8h_a39bcf4f23573a0764920063d29b4d44e}\label{_stack_8h_a39bcf4f23573a0764920063d29b4d44e}} 
-\#define \mbox{\hyperlink{_stack_8h_a39bcf4f23573a0764920063d29b4d44e}{W\+I\+T\+H\+\_\+\+H\+A\+SH}}
+\#define \mbox{\hyperlink{_stack_8h_a39bcf4f23573a0764920063d29b4d44e}{WITH\+\_\+\+HASH}}
 \begin{DoxyCompactList}\small\item\em Adding hash protection. (Caution! The stack will slow down.) \end{DoxyCompactList}\item 
-\#define \mbox{\hyperlink{_stack_8h_a95c73d088121504c3ba110413a8afbf1}{Stack\+Verifier}}(stk,  F\+U\+NC)
+\#define \mbox{\hyperlink{_stack_8h_a95c73d088121504c3ba110413a8afbf1}{Stack\+Verifier}}(stk,  FUNC)
 \begin{DoxyCompactList}\small\item\em Checking for errors after executing the function. \end{DoxyCompactList}\item 
-\#define \mbox{\hyperlink{_stack_8h_af71839d81ed6d016ea7696e09046b512}{Stack\+Verifier\+Killer}}(stk,  F\+U\+NC)
+\#define \mbox{\hyperlink{_stack_8h_af71839d81ed6d016ea7696e09046b512}{Stack\+Verifier\+Killer}}(stk,  FUNC)
 \begin{DoxyCompactList}\small\item\em Stops the program when an error occurs after executing the function. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{_stack_8h_a9182a1935da23f3b4a51972359ab357a}\label{_stack_8h_a9182a1935da23f3b4a51972359ab357a}} 
 \#define \mbox{\hyperlink{_stack_8h_a9182a1935da23f3b4a51972359ab357a}{Variable\+Type}}(var)~abi\+::\+\_\+\+\_\+cxa\+\_\+demangle(typeid(var).name(), 0, 0, nullptr)
@@ -48,27 +48,29 @@ typedef unsigned long long {\bfseries canary\+\_\+t}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{_stack_8h_aea589165190bd21f58923c6fd7359672}\label{_stack_8h_aea589165190bd21f58923c6fd7359672}} 
-enum {\bfseries Stack\+E\+R\+R\+OR} \{ \newline
-{\bfseries O\+K\+\_\+\+S\+T\+A\+CK} = 0, 
-{\bfseries N\+U\+L\+L\+\_\+\+S\+T\+A\+CK}, 
-{\bfseries C\+R\+E\+A\+T\+E\+D\+\_\+\+S\+T\+A\+CK}, 
-{\bfseries L\+E\+F\+T\+\_\+\+C\+A\+N\+A\+R\+Y\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+A\+M\+A\+G\+ED}, 
-\newline
-{\bfseries R\+I\+G\+H\+T\+\_\+\+C\+A\+N\+A\+R\+Y\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+A\+M\+A\+G\+ED}, 
-{\bfseries L\+E\+F\+T\+\_\+\+C\+A\+N\+A\+R\+Y\+\_\+\+D\+A\+T\+A\+\_\+\+D\+A\+M\+A\+G\+ED}, 
-{\bfseries R\+I\+G\+H\+T\+\_\+\+C\+A\+N\+A\+R\+Y\+\_\+\+D\+A\+T\+A\+\_\+\+D\+A\+M\+A\+G\+ED}, 
-{\bfseries H\+A\+S\+H\+\_\+\+B\+A\+S\+E\+\_\+\+D\+A\+M\+A\+G\+ED}, 
-\newline
-{\bfseries H\+A\+S\+H\+\_\+\+D\+A\+T\+A\+\_\+\+D\+A\+M\+A\+G\+ED}, 
-{\bfseries N\+O\+\_\+\+M\+E\+M\+O\+RY}, 
-{\bfseries E\+M\+P\+T\+Y\+\_\+\+S\+T\+A\+CK}, 
-{\bfseries S\+I\+Z\+E\+\_\+\+M\+O\+R\+E\+\_\+\+C\+A\+P\+A\+C\+I\+TY}, 
-\newline
-{\bfseries S\+I\+Z\+E\+\_\+\+O\+F\+\_\+\+E\+N\+UM}
+enum {\bfseries Stack\+ERROR} \{ \newline
+{\bfseries OK\+\_\+\+STACK} = 0
+, {\bfseries NULL\+\_\+\+STACK}
+, {\bfseries CREATED\+\_\+\+STACK}
+, {\bfseries LEFT\+\_\+\+CANARY\+\_\+\+STACK\+\_\+\+DAMAGED}
+, \newline
+{\bfseries RIGHT\+\_\+\+CANARY\+\_\+\+STACK\+\_\+\+DAMAGED}
+, {\bfseries LEFT\+\_\+\+CANARY\+\_\+\+DATA\+\_\+\+DAMAGED}
+, {\bfseries RIGHT\+\_\+\+CANARY\+\_\+\+DATA\+\_\+\+DAMAGED}
+, {\bfseries HASH\+\_\+\+BASE\+\_\+\+DAMAGED}
+, \newline
+{\bfseries HASH\+\_\+\+DATA\+\_\+\+DAMAGED}
+, {\bfseries NO\+\_\+\+MEMORY}
+, {\bfseries EMPTY\+\_\+\+STACK}
+, {\bfseries SIZE\+\_\+\+MORE\+\_\+\+CAPACITY}
+, \newline
+{\bfseries SIZE\+\_\+\+OF\+\_\+\+ENUM}
  \}
 \end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_stack_8h_a4616af7a49459e045f1da4fc6ffe9bf9}{Stack\+Dump\+\_\+}} (\mbox{\hyperlink{struct_stack}{Stack}} $\ast$stk, \mbox{\hyperlink{struct_stack_info}{Stack\+Info}} info)
 \item 
 int \mbox{\hyperlink{_stack_8h_a1be76c23065e4ed5fd39acc551fae844}{Stack\+Check\+\_\+}} (\mbox{\hyperlink{struct_stack}{Stack}} $\ast$stk)
 \item 
@@ -93,6 +95,8 @@ int \mbox{\hyperlink{_stack_8h_ad101f753a72aaca0e31f28431e77b3e7}{Stack\+Pop}} (
 int \mbox{\hyperlink{_stack_8h_aee82830857d2e2cf4041dfc60d32562b}{Stack\+Top}} (\mbox{\hyperlink{struct_stack}{Stack}} $\ast$stk, data\+\_\+t $\ast$value)
 \item 
 int \mbox{\hyperlink{_stack_8h_a38a4ef1398a57244832c5f1c3c3e41a1}{Stack\+Dtor}} (\mbox{\hyperlink{struct_stack}{Stack}} $\ast$stk)
+\item 
+size\+\_\+t \mbox{\hyperlink{_stack_8h_a61d5bf06111c0a73e3872aebad62137d}{Stack\+Size}} (\mbox{\hyperlink{struct_stack}{Stack}} $\ast$stk)
 \end{DoxyCompactItemize}
 
 
@@ -119,7 +123,7 @@ Displaying all necessary stack data, taking into account the \char`\"{}error\cha
 \index{Stack.h@{Stack.h}!StackVerifier@{StackVerifier}}
 \index{StackVerifier@{StackVerifier}!Stack.h@{Stack.h}}
 \doxysubsubsection{\texorpdfstring{StackVerifier}{StackVerifier}}
-{\footnotesize\ttfamily \#define Stack\+Verifier(\begin{DoxyParamCaption}\item[{}]{stk,  }\item[{}]{F\+U\+NC }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \#define Stack\+Verifier(\begin{DoxyParamCaption}\item[{}]{stk,  }\item[{}]{FUNC }\end{DoxyParamCaption})}
 
 {\bfseries Value\+:}
 \begin{DoxyCode}{0}
@@ -137,7 +141,7 @@ Checking for errors after executing the function.
 \index{Stack.h@{Stack.h}!StackVerifierKiller@{StackVerifierKiller}}
 \index{StackVerifierKiller@{StackVerifierKiller}!Stack.h@{Stack.h}}
 \doxysubsubsection{\texorpdfstring{StackVerifierKiller}{StackVerifierKiller}}
-{\footnotesize\ttfamily \#define Stack\+Verifier\+Killer(\begin{DoxyParamCaption}\item[{}]{stk,  }\item[{}]{F\+U\+NC }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \#define Stack\+Verifier\+Killer(\begin{DoxyParamCaption}\item[{}]{stk,  }\item[{}]{FUNC }\end{DoxyParamCaption})}
 
 {\bfseries Value\+:}
 \begin{DoxyCode}{0}
@@ -213,6 +217,19 @@ Error code(0 if there are no errors)
 \begin{DoxyReturn}{Returns}
 Error code(0 if there are no errors) 
 \end{DoxyReturn}
+\mbox{\Hypertarget{_stack_8h_a4616af7a49459e045f1da4fc6ffe9bf9}\label{_stack_8h_a4616af7a49459e045f1da4fc6ffe9bf9}} 
+\index{Stack.h@{Stack.h}!StackDump\_@{StackDump\_}}
+\index{StackDump\_@{StackDump\_}!Stack.h@{Stack.h}}
+\doxysubsubsection{\texorpdfstring{StackDump\_()}{StackDump\_()}}
+{\footnotesize\ttfamily void Stack\+Dump\+\_\+ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_stack}{Stack}} $\ast$}]{stk,  }\item[{\mbox{\hyperlink{struct_stack_info}{Stack\+Info}}}]{info }\end{DoxyParamCaption})}
+
+Displaying all necessary stack data, taking into account the \char`\"{}info\char`\"{} 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em stk} & Pointer to stack \\
+\hline
+\mbox{\texttt{ in}}  & {\em info} & Information about where and what broke \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{_stack_8h_a0f9cc6ba18c5e23d7cb83cf2aac27c07}\label{_stack_8h_a0f9cc6ba18c5e23d7cb83cf2aac27c07}} 
 \index{Stack.h@{Stack.h}!StackHashBaseCounter@{StackHashBaseCounter}}
 \index{StackHashBaseCounter@{StackHashBaseCounter}!Stack.h@{Stack.h}}
@@ -304,6 +321,20 @@ Update array after capacity change
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 Error code(0 if there are no errors) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{_stack_8h_a61d5bf06111c0a73e3872aebad62137d}\label{_stack_8h_a61d5bf06111c0a73e3872aebad62137d}} 
+\index{Stack.h@{Stack.h}!StackSize@{StackSize}}
+\index{StackSize@{StackSize}!Stack.h@{Stack.h}}
+\doxysubsubsection{\texorpdfstring{StackSize()}{StackSize()}}
+{\footnotesize\ttfamily size\+\_\+t Stack\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_stack}{Stack}} $\ast$}]{stk }\end{DoxyParamCaption})}
+
+\mbox{\hyperlink{struct_stack}{Stack}} Size 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em stk} & Pointer to stack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Size of stack or -\/1 if stack is damaged 
 \end{DoxyReturn}
 \mbox{\Hypertarget{_stack_8h_aee82830857d2e2cf4041dfc60d32562b}\label{_stack_8h_aee82830857d2e2cf4041dfc60d32562b}} 
 \index{Stack.h@{Stack.h}!StackTop@{StackTop}}

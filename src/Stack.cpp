@@ -1,6 +1,6 @@
 #include <Stack.h>
 
-#define YELLOW  "\x1b[33m"
+#define YELLOW  "\x1b[33m" // colors.h
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
 #define BLUE    "\x1b[34m"
@@ -20,10 +20,12 @@ static int NumberOfBits (int error) {
 
 void StackDump_ (Stack* stk, StackInfo info) {
     printf("\n");
+
     if (stk == nullptr) {
         printf("DUMP:" RED "Pointer of stack is nullptr\n" RESET);
         return;
     }
+
     info.error |= StackCheck_(stk);
     printf("Stack<" YELLOW "%s" RESET ">[" BLUE "%p" RESET "]",
            info.type, stk);
@@ -36,11 +38,13 @@ void StackDump_ (Stack* stk, StackInfo info) {
 
     printf(RED);
     if (info.error) {
+
         for (int i = 0; i < SIZE_OF_ENUM; i++) {
             if ((info.error >> i) & 1) {
                 printf("%s\n", ERROR_MESSAGE[i]);
             }
         }
+
     }
     printf(RESET);
 
@@ -51,7 +55,7 @@ void StackDump_ (Stack* stk, StackInfo info) {
            stk->capacity);
 
     printf(YELLOW "\tdata" RESET);
-    if (stk->data == nullptr) {
+    if (stk->data == nullptr) { // code style
         if (stk->capacity != 0)
             printf("[" RED "NULL" RESET "]\n");
         else printf("[" BLUE "NULL" RESET "]\n");
@@ -260,4 +264,9 @@ int StackDtor (Stack* stk) {
     stk->size = 0;
     stk->capacity = 0;
     return OK_STACK;
+}
+
+size_t StackSize (Stack* stk) {
+    if (StackCheck_(stk)) return -1ULL;
+    return stk->size;
 }
