@@ -117,19 +117,19 @@ $(function() {
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">}</span></div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keyword">enum</span> StackERROR {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    OK_STACK = 0,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    STACK_OK = 0,</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    NULL_STACK, <span class="comment">// manually numerate</span></div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    CREATED_STACK,</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    LEFT_CANARY_STACK_DAMAGED,</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    RIGHT_CANARY_STACK_DAMAGED,</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    LEFT_CANARY_DATA_DAMAGED,</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    RIGHT_CANARY_DATA_DAMAGED,</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    HASH_BASE_DAMAGED,</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    HASH_DATA_DAMAGED,</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    NO_MEMORY,</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    STACK_LEFT_CANARY_DAMAGED,</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    STACK_RIGHT_CANARY_DAMAGED,</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    STACK_LEFT_CANARY_DATA_DAMAGED,</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    STACK_RIGHT_CANARY_DATA_DAMAGED,</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    STACK_HASH_BASE_DAMAGED,</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    STACK_HASH_DATA_DAMAGED,</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    STACK_NO_MEMORY,</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    EMPTY_STACK,</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    SIZE_MORE_CAPACITY,</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    SIZE_OF_ENUM</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    STACK_SIZE_MORE_CAPACITY,</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    STACK_SIZE_OF_ENUM</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;};</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
 <div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="struct_stack.html">   71</a></span>&#160;<span class="keyword">struct </span><a class="code" href="struct_stack.html">Stack</a> {</div>

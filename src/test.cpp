@@ -17,9 +17,9 @@ void TestWithTorture () {
     StackVerifier(tortureChamber.victim,
                   StackPush(&tortureChamber.victim, 2));
     for (int i = -24; i <= -1; i++) tortureChamber.executionerRight[i] = 0xDD;
-    StackDump(tortureChamber.victim, OK_STACK);
+    StackDump(tortureChamber.victim, STACK_OK);
     for (int i = 2; i <= 9; i++) tortureChamber.executionerLeft[i] = 0xDD;
-    StackDump(tortureChamber.victim, OK_STACK);
+    StackDump(tortureChamber.victim, STACK_OK);
 }
 
 void MainTest () {
@@ -32,7 +32,7 @@ void MainTest () {
     StackVerifier(stk, StackPush(&stk, 3));
     StackVerifier(stk, StackPush(&stk, 4));
     StackVerifier(stk, StackPush(&stk, 5));
-    StackDump(stk, OK_STACK);
+    StackDump(stk, STACK_OK);
     StackVerifier(stk, StackPop(&stk));
     StackVerifier(stk, StackPop(&stk));
     StackVerifier(stk, StackPop(&stk));
@@ -52,7 +52,7 @@ void SniperTest () {
     StackVerifier(stk, StackPush(&stk, 3));
     char* aim = (char *) &stk.data;
     *aim = 0xF0;
-    StackDump(stk, OK_STACK);
+    StackDump(stk, STACK_OK);
     StackVerifier(stk, StackDtor(&stk));
 }
 

@@ -13,7 +13,7 @@
 
 static int NumberOfBits (int error) {
     int num = 0;
-    for (int i = 0; i < SIZE_OF_ENUM; i++)
+    for (int i = 0; i < STACK_SIZE_OF_ENUM; i++)
         num += ((error >> i) & 1);
     return num;
 }
@@ -29,7 +29,7 @@ void StackDump_ (Stack* stk, StackInfo info) {
     info.error |= StackCheck_(stk);
     printf("Stack<" YELLOW "%s" RESET ">[" BLUE "%p" RESET "]",
            info.type, stk);
-    if (info.error == OK_STACK)
+    if (info.error == STACK_OK)
         printf(GREEN " OK " RESET);
     else
         printf(RED " ERROR(%d) " RESET, NumberOfBits(info.error));
@@ -39,7 +39,7 @@ void StackDump_ (Stack* stk, StackInfo info) {
     printf(RED);
     if (info.error) {
 
-        for (int i = 0; i < SIZE_OF_ENUM; i++) {
+        for (int i = 0; i < STACK_SIZE_OF_ENUM; i++) {
             if ((info.error >> i) & 1) {
                 printf("%s\n", ERROR_MESSAGE[i]);
             }
@@ -93,20 +93,20 @@ void StackDump_ (Stack* stk, StackInfo info) {
 
 int StackCanaryCheck (Stack* stk) {
 #ifdef WITH_CANARY
-    int all_errors = OK_STACK;
-    if (stk->canary_l != CANARY_L_CONST) all_errors |= 1 << LEFT_CANARY_STACK_DAMAGED;
-    if (stk->canary_r != CANARY_R_CONST) all_errors |= 1 << RIGHT_CANARY_STACK_DAMAGED;
+    int all_errors = STACK_OK;
+    if (stk->canary_l != CANARY_L_CONST) all_errors |= 1 << STACK_LEFT_CANARY_DAMAGED;
+    if (stk->canary_r != CANARY_R_CONST) all_errors |= 1 << STACK_RIGHT_CANARY_DAMAGED;
     if (((canary_t *)stk->data)[-1] != CANARY_L_CONST)
-        all_errors |= 1 << LEFT_CANARY_DATA_DAMAGED;
+        all_errors |= 1 << STACK_LEFT_CANARY_DATA_DAMAGED;
     if (*((canary_t *)(stk->data + stk->capacity)) != CANARY_R_CONST)
-        all_errors |= 1 << RIGHT_CANARY_DATA_DAMAGED;
+        all_errors |= 1 << STACK_RIGHT_CANARY_DATA_DAMAGED;
     return all_errors;
 #endif
 }
 
 int StackHashCheck (Stack* stk) {
 #ifdef WITH_HASH
-    int all_errors = OK_STACK;
+    int all_errors = STACK_OK;
     StackHashBaseCounter(stk, &all_errors);
     StackHashDataCounter(stk, &all_errors);
     return all_errors;
@@ -116,8 +116,8 @@ int StackHashCheck (Stack* stk) {
 int StackCheck_(Stack* stk) {
     if (stk == nullptr || (stk->data == nullptr && stk->size == 0 && stk->capacity == 0))
         return 1 << NULL_STACK;
-    int all_errors = OK_STACK;
-    if (stk->size > stk->capacity) all_errors |= 1 << SIZE_MORE_CAPACITY;
+    int all_errors = STACK_OK;
+    if (stk->size > stk->capacity) all_errors |= 1 << STACK_SIZE_MORE_CAPACITY;
     all_errors |= StackCanaryCheck(stk);
     all_errors |= StackHashCheck(stk);
     return all_errors;
@@ -134,7 +134,7 @@ unsigned long long StackHashBaseCounter (Stack* stk, int* error) {
     for (size_t i = 0; i < sizeof(Stack) - 16; i++) {
         hash = hash * 17 + ptr[i];
     }
-    if (hash != stk->hash_base) if (error) *error |= 1 << HASH_BASE_DAMAGED;
+    if (hash != stk->hash_base) if (error) *error |= 1 << STACK_HASH_BASE_DAMAGED;
     return hash;
 }
 
@@ -146,12 +146,12 @@ unsigned long long StackHashDataCounter (Stack* stk, int* error) {
     unsigned long long hash = HASH_DATA_CONST;
     if (stk->data == nullptr) {
         if (stk->hash_data != HASH_DATA_CONST)
-            if (error) *error |= 1 << HASH_DATA_DAMAGED;
+            if (error) *error |= 1 << STACK_HASH_DATA_DAMAGED;
         return hash;
     }
     for (size_t i = 0; i < stk->size; i++)
         hash = hash * 37 + stk->data[i];
-    if (hash != stk->hash_data) if (error) *error |= 1 << HASH_DATA_DAMAGED;
+    if (hash != stk->hash_data) if (error) *error |= 1 << STACK_HASH_DATA_DAMAGED;
     return hash;
 }
 
@@ -166,14 +166,14 @@ int StackRealloc(Stack* stk) {
     canary_t* ptr = (canary_t *)stk->data - 1;
     ptr = (canary_t *) realloc(ptr, sizeof(canary_t) * 2 +
                                     sizeof(data_t) * stk->capacity);
-    if (ptr == nullptr) return 1 << NO_MEMORY;
+    if (ptr == nullptr) return 1 << STACK_NO_MEMORY;
     memset((char *)ptr + sizeof(canary_t) + sizeof(data_t) * stk->size,
            POISON, sizeof(data_t) * (stk->capacity - stk->size));
     *(canary_t *)((char *)ptr + sizeof(canary_t) + sizeof(data_t) * stk->capacity) = CANARY_R_CONST;
     stk->data = (data_t *)(ptr + 1);
 #else
     stk->data = (data_t *) realloc(stk->data, sizeof(data_t) * stk->capacity);
-    if (stk->data == nullptr) return 1 << NO_MEMORY;
+    if (stk->data == nullptr) return 1 << STACK_NO_MEMORY;
     memset((char *)stk->data + sizeof(data_t) * stk->size,
            POISON, sizeof(data_t) * (stk->capacity - stk->size));
 #endif
@@ -192,13 +192,13 @@ int StackCtor (Stack* stk, void (*print_func)(data_t), data_t (*poison_func)()) 
     stk->poison_func = poison_func;
     auto* ptr = (canary_t *)calloc(sizeof(canary_t) * 2 +
                                    sizeof(data_t) * stk->capacity, sizeof(char));
-    if (ptr == nullptr) return 1 << NO_MEMORY;
+    if (ptr == nullptr) return 1 << STACK_NO_MEMORY;
     ptr[0] = CANARY_L_CONST;
     *(canary_t *)((char *)ptr + sizeof(canary_t) + sizeof(data_t) * stk->capacity) = CANARY_R_CONST;
     stk->data = (data_t *)(ptr + 1);
 #else
     auto* ptr = (canary_t *)calloc(sizeof(data_t) * stk->capacity, sizeof(char));
-    if (ptr == nullptr) return 1 << NO_MEMORY;
+    if (ptr == nullptr) return 1 << STACK_NO_MEMORY;
     stk->data = (data_t *)ptr;
 #endif
 
@@ -207,7 +207,7 @@ int StackCtor (Stack* stk, void (*print_func)(data_t), data_t (*poison_func)()) 
 #ifdef WITH_HASH
     StackUpdateHash(stk);
 #endif
-    return OK_STACK;
+    return STACK_OK;
 }
 
 int StackPush (Stack* stk, data_t value) {
@@ -222,7 +222,7 @@ int StackPush (Stack* stk, data_t value) {
     StackUpdateHash(stk);
 #endif
     StackCheck(stk);
-    return OK_STACK;
+    return STACK_OK;
 }
 
 int StackPop (Stack* stk, data_t* pop_elem) {
@@ -240,14 +240,14 @@ int StackPop (Stack* stk, data_t* pop_elem) {
     StackUpdateHash(stk);
 #endif
     StackCheck(stk);
-    return OK_STACK;
+    return STACK_OK;
 }
 
 int StackTop(Stack* stk, data_t* value) {
     StackCheck(stk);
     if (stk->size == 0) return 1 << EMPTY_STACK;
     *value = stk->data[stk->size - 1];
-    return OK_STACK;
+    return STACK_OK;
 }
 
 int StackDtor (Stack* stk) {
@@ -263,7 +263,7 @@ int StackDtor (Stack* stk) {
     stk->data = nullptr;
     stk->size = 0;
     stk->capacity = 0;
-    return OK_STACK;
+    return STACK_OK;
 }
 
 size_t StackSize (Stack* stk) {
