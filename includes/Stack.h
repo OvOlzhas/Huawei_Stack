@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <config.h>
 #include <cxxabi.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,7 +7,6 @@
 #include <typeinfo>
 //! @file
 
-typedef int data_t;
 typedef unsigned long long canary_t;
 
 static const canary_t CANARY_L_CONST = 0xFFAAFFBBFAFBFCFD;
